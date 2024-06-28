@@ -15,11 +15,19 @@ public class TaskController {
     private TaskService taskService;
 
     @PostMapping("/create")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Task> createTask(@RequestBody Task task) {
         return ResponseEntity.ok(taskService.createTask(task));
     }
 
-    @GetMapping
+    @GetMapping("/gettaskbyemail/{email}")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<List<Task>> getAllTasksbyEmail(@PathVariable String email) {
+        return ResponseEntity.ok(taskService.getAllTaskByEmail(email));
+    }
+
+    @GetMapping("/getAllTask")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<List<Task>> getAllTasks() {
         return ResponseEntity.ok(taskService.getAllTasks());
     }

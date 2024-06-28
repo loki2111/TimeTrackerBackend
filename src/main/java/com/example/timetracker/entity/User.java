@@ -14,11 +14,21 @@ public class User {
 
     private String password;
 
-    private String designation;
+    private String profession;
 
     private String gender;
 
     private String experience;
+
+    private String timestamp;
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public String getExperience() {
         return experience;
@@ -68,11 +78,11 @@ public class User {
         this.password = password;
     }
 
-    public String getDesignation() {
-        return designation;
+    public String getProfession() {
+        return profession; 
     }
 
-    public void setDesignation(String designation) {
-        this.designation = designation;
+    public void setProfession(String profession) {
+        this.profession = profession;
     }
 }

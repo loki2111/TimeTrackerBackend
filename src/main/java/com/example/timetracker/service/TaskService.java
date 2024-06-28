@@ -17,6 +17,10 @@ public class TaskService {
     }
 
     public List<Task> getAllTasks() {
-        return taskRepository.findAllByOrderByCreatedAtAsc();
+        return taskRepository.findAllByOrderByLoginTimeAsc();
+    }
+
+    public List<Task> getAllTaskByEmail(String email){
+        return  taskRepository.findAllByEmail(email);
     }
 }
