@@ -22,7 +22,7 @@ public class TaskController {
 
     @GetMapping("/gettaskbyemail/{email}")
     @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<List<Task>> getAllTasksbyEmail(@PathVariable String email) {
+    public ResponseEntity<List<Task>> getAllTasksbyEmail(@RequestParam String email) {
         return ResponseEntity.ok(taskService.getAllTaskByEmail(email));
     }
 

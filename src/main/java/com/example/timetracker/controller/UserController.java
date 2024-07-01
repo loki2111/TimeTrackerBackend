@@ -1,6 +1,8 @@
 package com.example.timetracker.controller;
 
+import com.example.timetracker.entity.Location;
 import com.example.timetracker.entity.User;
+import com.example.timetracker.service.LocationService;
 import com.example.timetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,9 @@ import java.util.logging.Logger;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LocationService locationService;
 
     @PostMapping("/register")
     @CrossOrigin(origins = "http://localhost:4200")
@@ -63,6 +68,19 @@ public class UserController {
             throw new Exception("User does not exists!!! Please enter valid credentials...");
         }
         return userObj;
+    }
+
+
+    @PostMapping("/saveLocation")
+    public String saveLocation(@RequestBody Location location) {
+        locationService.saveLocation(location);
+        return "Location saved successfully!";
+    }
+
+    @GetMapping("/getlocation/{useremail}")
+    public Location getlocation(@PathVariable String useremail){
+        System.out.println(locationService.getLocation(useremail));
+        return locationService.getLocation(useremail);
     }
 
 }
