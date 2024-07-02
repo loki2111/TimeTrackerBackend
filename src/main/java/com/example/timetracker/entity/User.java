@@ -22,6 +22,16 @@ public class User {
 
     private String timestamp;
 
+    private String location;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public String getTimestamp() {
         return timestamp;
     }

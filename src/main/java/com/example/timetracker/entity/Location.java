@@ -12,8 +12,8 @@ import jakarta.persistence.*;
         private Long id;
 
        private String useremail;
-        private Double latitude;
 
+        private Double latitude;
 
         private Double longitude;
 
