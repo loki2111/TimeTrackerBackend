@@ -24,6 +24,16 @@ public class User {
 
     private String location;
 
+    public String getLogouttime() {
+        return logouttime;
+    }
+
+    public void setLogouttime(String logouttime) {
+        this.logouttime = logouttime;
+    }
+
+    private String logouttime;
+
     public String getLocation() {
         return location;
     }

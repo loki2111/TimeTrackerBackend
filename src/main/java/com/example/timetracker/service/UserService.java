@@ -14,7 +14,7 @@ public class UserService {
     private UserRepository userRepository;
 
 
-    public Optional<User> findByEmail(String email) {
+    public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -31,4 +31,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
+
+    public User savelogouttime(User user) {
+        user.setLogouttime(user.getLogouttime());
+        return userRepository.save(user);
+    }
 }

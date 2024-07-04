@@ -17,11 +17,10 @@ public class AuthController {
     @PostMapping("/login")
     @CrossOrigin(origins = "http://localhost:4200")
     public String login(@RequestParam String email, @RequestParam String password) {
-        Optional<User> userOpt = userService.findByEmail(email);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            if (user.getPassword().equals(password)) {
-                return "Login successful as " + user.getProfession();
+        User userOpt = userService.findByEmail(email);
+        if (userOpt!=null) {
+            if (userOpt.getPassword().equals(password)) {
+                return "Login successful as ";
             }
         }
         return "Invalid email or password";
