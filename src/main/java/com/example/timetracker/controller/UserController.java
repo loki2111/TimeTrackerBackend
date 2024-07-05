@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -24,7 +27,11 @@ public class UserController {
     @Autowired
     private LocationService locationService;
 
+    private static final String key = "AESEncryptionKey"; // 128 bit key
+    private static final String transformation = "AES";
+
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
 
     public static boolean isValidEmail(String email) {
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
@@ -32,19 +39,46 @@ public class UserController {
         return matcher.matches();
     }
 
-    @PostMapping("/register")
+
+    public static String encrypt(String plainText) throws Exception {
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), transformation);
+        Cipher cipher = Cipher.getInstance(transformation);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+        byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
+        return Base64.getEncoder().encodeToString(encryptedBytes);
+    }
+
+    public static String decrypt(String encryptedText) throws Exception {
+        try {
+            SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), transformation);
+            Cipher cipher = Cipher.getInstance(transformation);
+            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedText));
+            return new String(decryptedBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+        @PostMapping("/register")
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<?> registerUser(@RequestBody User user) throws Exception{
+
         if (!isValidEmail(user.getEmail())) {
             return new ResponseEntity<>("enter valid userId", HttpStatus.BAD_REQUEST);
         }
         if (user.getEmail() != null || !"".equals(user.getEmail())) {
              User userObj = userService.findByEmail(user.getEmail());
+            String password=encrypt(user.getPassword());
+            user.setPassword(password);
+            userService.saveUser(user);
+
             if (userObj!=null) {
                 throw new Exception("User with " + user.getEmail() + " already exists !!!");
             }
         }
-        return ResponseEntity.ok(userService.saveUser(user));
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/{email}")
@@ -71,7 +105,9 @@ public class UserController {
     {
         String currEmail = user.getEmail();
 
-        String currPassword = user.getPassword();
+        String currPassword = encrypt(user.getPassword());
+        System.out.println(currPassword);
+
 
         User userObj = null;
         if(currEmail != null && currPassword != null)
@@ -79,6 +115,7 @@ public class UserController {
             userObj = userService.fetchUserByEmailAndPassword(currEmail, currPassword);
             userObj.setTimestamp(user.getTimestamp());
             userObj.setLocation(user.getLocation());
+//            userObj.setPassword(decrypt(userObj.getPassword()));
             userService.saveUser(userObj);
 
         }
