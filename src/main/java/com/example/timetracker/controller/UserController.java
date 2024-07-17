@@ -19,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
@@ -60,7 +61,11 @@ public class UserController {
             return null;
         }
     }
-
+	@GetMapping("/")
+	public String welcomeMessage()
+	{
+		return "Welcome to Time tracker application !!!";
+	}
         @PostMapping("/register")
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<?> registerUser(@RequestBody User user) throws Exception{

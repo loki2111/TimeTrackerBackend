@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -16,7 +15,7 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/login")
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin = (*)
     public String login(@RequestParam String email, @RequestParam String password) {
         User userOpt = userService.findByEmail(email);
         if (userOpt!=null) {
